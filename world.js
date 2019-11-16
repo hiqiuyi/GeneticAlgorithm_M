@@ -22,7 +22,7 @@ function randomSort(a, b) {
  */
 function genEmptyArr(row, col) {
     let rowArr = new Array(row);
-    for (let i = 0; i < col; i++) {
+    for (let i = 0; i < row; i++) {
         rowArr[i] = new Array(col);
     }
 

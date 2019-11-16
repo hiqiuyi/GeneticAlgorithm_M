@@ -15,6 +15,22 @@ let curPosition = [0, 0];
 // 当前得分
 let curScore = 0;
 
+// 记录那些地方已经走过
+let worldArrMemory;
+
+/**
+ * 初始化记忆数组 0=未走过 1=走过
+ */
+function initWorldArrMemory() {
+    worldArrMemory = new Array(row);
+    for (let i = 0; i < row; i++) {
+        worldArrMemory[i] = new Array(column).fill(0);
+    }
+
+    worldArrMemory[0][0] = 1
+}
+
+
 /**
  * 向北移动
  * @param worldArr
@@ -110,6 +126,9 @@ function doAction(worldArr, actNum) {
             break;
     }
 
+    let x = curPosition[0];
+    let y = curPosition[1];
+    worldArrMemory[x][y] = 1;
 }
 
 /**
@@ -120,7 +139,7 @@ function doAction(worldArr, actNum) {
  * @returns {*}
  */
 function getActionValue(worldArr, conditionArr, strategyArr) {
-    // 0=墙，1=空，2=灌
+    // 0=墙，1=空且走过，2=空且未走过 3=罐且走过 4=罐且未走过
     const x = curPosition[0];
     const y = curPosition[1];
     let north;
@@ -132,28 +151,48 @@ function getActionValue(worldArr, conditionArr, strategyArr) {
     if(y - 1 < 0){
         north = 0;
     }else{
-        north = worldArr[x][y-1] + 1;
+        if(worldArr[x][y-1] === 0){
+            north = worldArrMemory[x][y-1] === 1 ? 1 : 2
+        }else{
+            north = worldArrMemory[x][y-1] === 1 ? 3 : 4
+        }
     }
 
     if(y + 1 > row - 1){
         south = 0;
     }else{
-        south = worldArr[x][y+1] + 1;
+        if(worldArr[x][y+1] === 0){
+            south = worldArrMemory[x][y+1] === 1 ? 1 : 2
+        }else{
+            south = worldArrMemory[x][y+1] === 1 ? 3 : 4
+        }
     }
 
     if(x + 1 > column - 1){
         east = 0;
     }else{
-        east = worldArr[x+1][y] + 1;
+        if(worldArr[x+1][y] === 0){
+            east = worldArrMemory[x+1][y] === 1 ? 1 : 2
+        }else{
+            east = worldArrMemory[x+1][y] === 1 ? 3 : 4
+        }
     }
 
     if(x - 1 < 0 ){
         west = 0
     }else{
-        west = worldArr[x-1][y] + 1;
+        if(worldArr[x-1][y] === 0){
+            west = worldArrMemory[x-1][y] === 1 ? 1 : 2
+        }else{
+            west = worldArrMemory[x-1][y] === 1 ? 3 : 4
+        }
     }
 
-    mid = worldArr[x][y] + 1;
+    if(worldArr[x][y] === 0){
+        mid = worldArrMemory[x][y] === 1 ? 1 : 2
+    }else{
+        mid = worldArrMemory[x][y] === 1 ? 3 : 4
+    }
 
     let conditionStr = ''+north+south+east+west+mid;
     let conditionIndex = conditionArr.indexOf(conditionStr);
@@ -171,6 +210,7 @@ function getActionValue(worldArr, conditionArr, strategyArr) {
 function getScore(worldArr, conditionArr, strategyArr){
     curPosition = [0, 0];
     curScore = 0;
+    initWorldArrMemory();
 
     for(let i = 0; i< stepNum; i++){
         let actionValue = getActionValue(worldArr, conditionArr, strategyArr);
@@ -196,7 +236,6 @@ function getActions(worldArr, conditionArr, strategyArr){
         let actionValue = getActionValue(worldArr, conditionArr, strategyArr);
         doAction(worldArr, actionValue);
         actionArr[i] = actionValue;
-
     }
 
     return actionArr;
