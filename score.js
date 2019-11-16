@@ -155,43 +155,43 @@ function getActionValue(worldArr, conditionArr, strategyArr) {
     let west;
     let mid;
 
-    if(y - 1 < 0){
+    if(x - 1 < 0){
         north = 0;
     }else{
-        if(worldArr[x][y-1] === 0){
-            north = worldArrMemory[x][y-1] === 1 ? 1 : 2
+        if(worldArr[x-1][y] === 0){
+            north = worldArrMemory[x-1][y] === 1 ? 1 : 2
         }else{
-            north = worldArrMemory[x][y-1] === 1 ? 3 : 4
+            north = worldArrMemory[x-1][y] === 1 ? 3 : 4
         }
     }
 
-    if(y + 1 > row - 1){
+    if(x + 1 > row - 1){
         south = 0;
     }else{
-        if(worldArr[x][y+1] === 0){
-            south = worldArrMemory[x][y+1] === 1 ? 1 : 2
+        if(worldArr[x+1][y] === 0){
+            south = worldArrMemory[x+1][y] === 1 ? 1 : 2
         }else{
-            south = worldArrMemory[x][y+1] === 1 ? 3 : 4
+            south = worldArrMemory[x+1][y] === 1 ? 3 : 4
         }
     }
 
-    if(x + 1 > column - 1){
+    if(y + 1 > column - 1){
         east = 0;
     }else{
-        if(worldArr[x+1][y] === 0){
-            east = worldArrMemory[x+1][y] === 1 ? 1 : 2
+        if(worldArr[x][y+1] === 0){
+            east = worldArrMemory[x][y+1] === 1 ? 1 : 2
         }else{
-            east = worldArrMemory[x+1][y] === 1 ? 3 : 4
+            east = worldArrMemory[x][y+1] === 1 ? 3 : 4
         }
     }
 
-    if(x - 1 < 0 ){
+    if(y - 1 < 0 ){
         west = 0
     }else{
-        if(worldArr[x-1][y] === 0){
-            west = worldArrMemory[x-1][y] === 1 ? 1 : 2
+        if(worldArr[x][y-1] === 0){
+            west = worldArrMemory[x][y-1] === 1 ? 1 : 2
         }else{
-            west = worldArrMemory[x-1][y] === 1 ? 3 : 4
+            west = worldArrMemory[x][y-1] === 1 ? 3 : 4
         }
     }
 
