@@ -102,6 +102,10 @@ function pickCan(worldArr) {
  * @param actNum  0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
  */
 function doAction(worldArr, actNum) {
+    // logger.info("============");
+    // logger.info("worldArr_1:", worldArr);
+    // logger.info(actionNameArr[actNum]);
+
     switch (actNum) {
         case 0:
             moveToNorth(worldArr);
@@ -131,9 +135,9 @@ function doAction(worldArr, actNum) {
     let y = curPosition[1];
     worldArrMemory[x][y] = 1;
 
-    // logger.info(actionNameArr[actNum]);
-    // logger.info(worldArrMemory);
-    // logger.info(worldArr);
+    // logger.info("worldArr_2:", worldArr);
+    // logger.info("worldArrMemory=", worldArrMemory);
+
     // logger.info(curScore);
     // logger.info("=============");
 }
@@ -204,7 +208,24 @@ function getActionValue(worldArr, conditionArr, strategyArr) {
     let conditionStr = ''+north+south+east+west+mid;
     let conditionIndex = conditionArr.indexOf(conditionStr);
 
+    // printCondition(conditionStr);
     return strategyArr[conditionIndex];
+}
+
+/**
+ * 打印当前环境
+ * @param conditionStr
+ */
+function printCondition(conditionStr) {
+    // 0=墙，1=空且走过，2=空且未走过 3=罐且走过 4=罐且未走过
+    logger.info(conditionStr);
+    conditionStr = conditionStr.replace(/0/g, '墙,');
+    conditionStr = conditionStr.replace(/1/g, '空且走过,');
+    conditionStr = conditionStr.replace(/2/g, '空且未走过,');
+    conditionStr = conditionStr.replace(/3/g, '罐且走过,');
+    conditionStr = conditionStr.replace(/4/g, '罐且未走过,');
+
+    logger.info(conditionStr);
 }
 
 /**
