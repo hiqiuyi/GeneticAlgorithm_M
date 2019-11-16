@@ -20,6 +20,6 @@ module.exports = {
     "# geneMutationNum": "基因突变数量",
     "geneMutationNum": 100,
     "# topN": "从得分最高的topN的策略进行组合下一代",
-    "topN": 8,
+    "topN": 30,
     "actionNameArr": ["向北移动", "向南移动", "向东移动", "向西移动", "不动", "捡罐子", "随机移动"]
 };
