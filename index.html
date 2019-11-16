@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>罗比的世界</title>
+    <script src="https://cdn.bootcss.com/phaser/3.19.0/phaser.min.js"></script>
+</head>
+<body>
+<script>
+    const config = {
+        width: 800,
+        height: 600,
+        type: Phaser.CANVAS,
+        parent: 'phaser-example',
+        autoCenter: Phaser.Scale.Center.CENTER_BOTH,
+        backgroundColor: '#ffffff',
+        scene: {
+            preload: preload,
+            create: create
+        }
+    };
+    const game = new Phaser.Game(config);
+    const row = 10;
+    const column = 10;
+    let strategyArr = [3, 0, 1, 6, 6, 5, 1, 6, 0, 4, 3, 3, 5, 5, 6, 1, 4, 0, 6, 4, 4, 4, 3, 5, 3, 3, 0, 5, 5, 4, 1, 3, 5, 0, 3, 5, 5, 2, 5, 5, 1, 5, 6, 3, 3, 6, 2, 5, 3, 2, 5, 1, 2, 3, 5, 6, 2, 6, 0, 1, 6, 5, 2, 3, 2, 5, 1, 1, 5, 5, 1, 3, 0, 2, 5, 5, 2, 5, 3, 1, 3, 1, 5, 1, 3, 0, 5, 4, 1, 5, 5, 2, 5, 1, 2, 5, 4, 2, 2, 6, 2, 5, 5, 2, 5, 0, 6, 5, 4, 2, 5, 5, 0, 5, 4, 3, 5, 5, 1, 5, 4, 3, 5, 6, 3, 5, 3, 2, 5, 5, 6, 2, 5, 2, 2, 0, 6, 4, 4, 1, 0, 2, 6, 1, 2, 1, 5, 3, 1, 5, 4, 1, 1, 6, 2, 2, 2, 3, 2, 6, 2, 1, 4, 5, 6, 5, 0, 5, 2, 6, 3, 5, 2, 3, 4, 0, 5, 5, 2, 5, 4, 5, 0, 6, 2, 5, 1, 2, 5, 3, 6, 0, 4, 0, 5, 2, 0, 5, 4, 1, 0, 5, 0, 5, 4, 0, 5, 2, 5, 5, 5, 6, 2, 3, 0, 2, 3, 0, 3, 0, 1, 1, 1, 3, 5, 5, 0, 5, 6, 1, 1, 4, 6, 1, 4, 3, 0, 3, 2, 2, 4, 3, 1];
+    let curPosition = [0, 0];
+    let curScore = 0;
+    let reStartFlag = 0;
+
+    Window.GA = {
+        'this': null,
+        'game': game,
+        'worldArr': null,
+        'peopleImg': null,
+        'canImgMap': {},
+        'graphicsArr': [],
+        'reStart': null
+    };
+
+    function preload() {
+        this.load.image('apple', 'http://pic.hiqiuyi.cn/blog/20191103/1uBaeFnNqzK8.png-30px');
+        this.load.image('can', 'http://pic.hiqiuyi.cn/blog/20191103/joXxsjAylPur.png-30px');
+        this.load.image('people', 'http://pic.hiqiuyi.cn/blog/20191103/tvJ6LT5bE3XI.png-30px');
+    }
+
+    const sleep = m => new Promise(r => setTimeout(r, m));
+
+    /**
+     * 重新开始
+     */
+    function reStart() {
+        console.log('===restart===');
+        reStartFlag = 1;
+        (async () => {
+            await sleep(500);
+
+            for(let i=0; i<Window.GA.graphicsArr.length; i++){
+                Window.GA.graphicsArr[i].clear();
+            }
+            Window.GA.peopleImg.destroy();
+            let canImgMapValues = Object.values(Window.GA.canImgMap);
+            for(let i=0; i<canImgMapValues.length; i++){
+                canImgMapValues[i].destroy();
+            }
+
+            create.call(Window.GA.this);
+        })();
+    }
+
+    function create() {
+        reStartFlag = 0;
+        Window.GA.this = this;
+        const worldArr = genWorldArr();
+        Window.GA.worldArr = worldArr;
+
+        // 放置按钮
+        if(Window.GA.reStart === null){
+            Window.GA.reStart = Window.GA.this.add.sprite(400, 580, 'apple').setScale(1).setScrollFactor(0).setInteractive();
+            Window.GA.reStart.on('pointerdown', reStart);
+        }
+
+
+        // 放置罐
+        for (let i = 0; i < Window.GA.worldArr.length; i++) {
+            for (let j = 0; j < Window.GA.worldArr[i].length; j++) {
+                if (Window.GA.worldArr[i][j] === 1) {
+                    Window.GA.canImgMap["" + i + "," + j] = Window.GA.this.add.image(175 + i * 50, 75 + j * 50, 'can');
+                }
+            }
+        }
+
+        Window.GA.peopleImg = Window.GA.this.add.image(175, 75, 'people');
+
+        // 生成世界格子
+        for (let i = 0; i <= 10; i++) {
+            let line = new Phaser.Geom.Line(150, 50 + 50 * i, 150 + 50 * 10, 50 + 50 * i);
+            let graphics_row = Window.GA.this.add.graphics({lineStyle: {width: 2, color: 0x000000}});
+            graphics_row.strokeLineShape(line);
+            Window.GA.graphicsArr.push(graphics_row);
+
+            line = new Phaser.Geom.Line(150 + 50 * i, 50, 150 + 50 * i, 50 + 50 * 10);
+            let graphics_column = Window.GA.this.add.graphics({lineStyle: {width: 2, color: 0x000000}});
+            graphics_column.strokeLineShape(line);
+            Window.GA.graphicsArr.push(graphics_column);
+        }
+
+        let actions = getActions(worldArr, genCondition(), strategyArr);
+        console.log('actions', actions);
+        console.log('score', curScore);
+
+        // 0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
+        curPosition = [0, 0];
+        curScore = 0;
+
+        (async () => {
+            for (let i = 0; i < actions.length; i++) {
+                await sleep(100);
+                luoBiDoAction(worldArr, actions[i]);
+                if(reStartFlag === 1){
+                    break;
+                }
+            }
+        })()
+
+    }
+
+    /**
+     * destroy 图片
+     */
+    function destroyImg() {
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                if (Window.GA.worldArr[i][j] === 1) {
+                    setTimeout(function () {
+                        Window.GA.canImgMap['' + i + ',' + j].destroy()
+                    }, i * 1000);
+                }
+            }
+        }
+    }
+
+    /**
+     * 生成世界拉罐数组
+     * @returns {any[]}
+     */
+    function genWorldArr() {
+        const worldArr = new Array(10).fill(0);
+        for (let i = 0; i < 10; i++) {
+            worldArr[i] = new Array(10).fill(0);
+        }
+
+        let randomArr = new Array(100).fill(0);
+        for (let i = 0; i < 50; i++) {
+            randomArr[i] = 1;
+        }
+
+        randomArr.sort((a, b) => Math.random() > 0.5 ? -1 : 1);
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < 10; j++) {
+                worldArr[i][j] = randomArr[i * 10 + j]
+            }
+        }
+
+        return worldArr;
+    }
+
+
+    //============================================
+    /**
+     * 生成情形数组，共3*3*3*3*3种情形。因为机器人的东西南北中有三中情况（墙、空、灌）。
+     */
+    function genCondition() {
+        // 0=墙，1=空，2=灌
+        let conditionArr = new Array(3 * 3 * 3 * 3 * 3);
+
+        let n = 0;
+        // i=北，j=南，k=东，l=西，m=中
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                for (let k = 0; k < 3; k++) {
+                    for (let l = 0; l < 3; l++) {
+                        for (let m = 0; m < 3; m++) {
+                            conditionArr[n] = '' + i + j + k + l + m;
+                            n++;
+                        }
+                    }
+                }
+            }
+        }
+
+        return conditionArr;
+    }
+
+    /**
+     * 获取策略的所有行动
+     * @param worldArr 世界数组
+     * @param conditionArr 情形数组
+     * @param strategyArr 策略数组
+     * @returns {any[]}
+     */
+    function getActions(worldArr, conditionArr, strategyArr) {
+        curPosition = [0, 0];
+        curScore = 0;
+
+        let actionArr = new Array(200);
+        for (let i = 0; i < actionArr.length; i++) {
+            let actionValue = getActionValue(worldArr, conditionArr, strategyArr);
+            doAction(worldArr, actionValue);
+            actionArr[i] = actionValue;
+
+        }
+
+        return actionArr;
+    }
+
+
+    /**
+     * 获取行动值
+     * @param worldArr 世界数据
+     * @param conditionArr 情形数组
+     * @param strategyArr 策略
+     * @returns {*}
+     */
+    function getActionValue(worldArr, conditionArr, strategyArr) {
+        // 0=墙，1=空，2=灌
+        const x = curPosition[0];
+        const y = curPosition[1];
+        let north;
+        let south;
+        let east;
+        let west;
+        let mid;
+
+        if (y - 1 < 0) {
+            north = 0;
+        } else {
+            north = worldArr[x][y - 1] + 1;
+        }
+
+        if (y + 1 > row - 1) {
+            south = 0;
+        } else {
+            south = worldArr[x][y + 1] + 1;
+        }
+
+        if (x + 1 > column - 1) {
+            east = 0;
+        } else {
+            east = worldArr[x + 1][y] + 1;
+        }
+
+        if (x - 1 < 0) {
+            west = 0
+        } else {
+            west = worldArr[x - 1][y] + 1;
+        }
+
+        mid = worldArr[x][y] + 1;
+
+        let conditionStr = '' + north + south + east + west + mid;
+        let conditionIndex = conditionArr.indexOf(conditionStr);
+
+        return strategyArr[conditionIndex];
+    }
+
+    /**
+     *
+     * @param worldArr 世界
+     * @param actNum  0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
+     */
+    function doAction(worldArr, actNum) {
+        switch (actNum) {
+            case 0:
+                moveToNorth(worldArr);
+                break;
+            case 1:
+                moveToSouth(worldArr);
+                break;
+            case 2:
+                moveToEast(worldArr);
+                break;
+            case 3:
+                moveToWest(worldArr);
+                break;
+            case 4:
+                break;
+            case 5:
+                pickCan(worldArr);
+                break;
+            case 6:
+                doAction(worldArr, randomSelect([0, 1, 2, 3]));
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * 向北移动
+     * @param worldArr
+     */
+    function moveToNorth(worldArr) {
+        if (curPosition[1] - 1 < 0) {
+            curScore -= 5;
+        } else {
+            curPosition[1] -= 1;
+        }
+    }
+
+    /**
+     * 向南移动
+     * @param worldArr
+     */
+    function moveToSouth(worldArr) {
+        if (curPosition[1] + 1 > row - 1) {
+            curScore -= 5;
+        } else {
+            curPosition[1] += 1;
+        }
+    }
+
+    /**
+     * 向东移动
+     * @param worldArr
+     */
+    function moveToEast(worldArr) {
+        if (curPosition[0] + 1 > column - 1) {
+            curScore -= 5;
+        } else {
+            curPosition[0] += 1;
+        }
+    }
+
+    /**
+     * 向西移动
+     * @param worldArr
+     */
+    function moveToWest(worldArr) {
+        if (curPosition[0] - 1 < 0) {
+            curScore -= 5;
+        } else {
+            curPosition[0] -= 1;
+        }
+    }
+
+    /**
+     * 捡罐子
+     * @param worldArr
+     */
+    function pickCan(worldArr) {
+        let x = curPosition[0];
+        let y = curPosition[1];
+
+        if (worldArr[x][y] === 1) {
+            curScore += 10;
+            worldArr[x][y] = 0;
+        } else {
+            curScore -= 1;
+        }
+    }
+
+    /**
+     * 数组随机选择一个数
+     * @param arr
+     * @returns {*}
+     */
+    function randomSelect(arr) {
+        let index = Math.floor((Math.random() * arr.length));
+        return arr[index];
+    }
+
+
+    /**
+     *
+     * @param worldArr 世界
+     * @param actNum  0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
+     */
+    function luoBiDoAction(worldArr, actNum) {
+        let x = curPosition[0];
+        let y = curPosition[1];
+        switch (actNum) {
+            case 0:
+                moveToNorth(worldArr);
+                break;
+            case 1:
+                moveToSouth(worldArr);
+                break;
+            case 2:
+                moveToEast(worldArr);
+                break;
+            case 3:
+                moveToWest(worldArr);
+                break;
+            case 4:
+                break;
+            case 5:
+                pickCan(worldArr);
+                x = curPosition[0];
+                y = curPosition[1];
+                if (Window.GA.canImgMap.hasOwnProperty("" + x + "," + y)) {
+                    console.log('捡到罐');
+                    Window.GA.canImgMap["" + x + "," + y].destroy();
+                } else {
+                    console.log('什么都没有捡到');
+                }
+                break;
+            case 6:
+                doAction(worldArr, randomSelect([0, 1, 2, 3]));
+                break;
+            default:
+                break;
+        }
+
+        let curX = curPosition[0];
+        let curY = curPosition[1];
+
+        if (x !== curX || y !== curY) {
+            Window.GA.peopleImg.destroy();
+            Window.GA.peopleImg = Window.GA.this.add.image(175 + curX * 50, 75 + curY * 50, 'people');
+
+            let line = new Phaser.Geom.Line(175 + x * 50, 75 + y * 50, 175 + curX * 50, 75 + curY * 50);
+            let graphics_path = Window.GA.this.add.graphics({lineStyle: {width: 1, color: 0xFF5C39}});
+            graphics_path.strokeLineShape(line);
+
+            Window.GA.graphicsArr.push(graphics_path);
+        }
+
+        console.log(x, y)
+    }
+</script>
+
+</body>
+</html>
