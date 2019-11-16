@@ -9,6 +9,7 @@ const conditionNum = config.conditionNum;
 const actions = config.actions;
 const taskNum = config.taskNum;
 const stepNum = config.stepNum;
+const actionNameArr = config.actionNameArr;
 
 // 当前位置
 let curPosition = [0, 0];
@@ -36,10 +37,10 @@ function initWorldArrMemory() {
  * @param worldArr
  */
 function moveToNorth(worldArr) {
-    if(curPosition[1] - 1 < 0){
+    if(curPosition[0] - 1 < 0){
         curScore -= 5;
     }else{
-        curPosition[1] -= 1;
+        curPosition[0] -= 1;
     }
 }
 
@@ -48,10 +49,10 @@ function moveToNorth(worldArr) {
  * @param worldArr
  */
 function moveToSouth(worldArr) {
-    if(curPosition[1] + 1 > row - 1){
+    if(curPosition[0] + 1 > row - 1){
         curScore -= 5;
     }else{
-        curPosition[1] += 1;
+        curPosition[0] += 1;
     }
 }
 
@@ -60,10 +61,10 @@ function moveToSouth(worldArr) {
  * @param worldArr
  */
 function moveToEast(worldArr) {
-    if(curPosition[0] + 1 > column - 1){
+    if(curPosition[1] + 1 > column - 1){
         curScore -= 5;
     }else{
-        curPosition[0] += 1;
+        curPosition[1] += 1;
     }
 }
 
@@ -72,10 +73,10 @@ function moveToEast(worldArr) {
  * @param worldArr
  */
 function moveToWest(worldArr) {
-    if(curPosition[0] - 1 < 0){
+    if(curPosition[1] - 1 < 0){
         curScore -= 5;
     }else{
-        curPosition[0] -= 1;
+        curPosition[1] -= 1;
     }
 }
 
@@ -129,6 +130,12 @@ function doAction(worldArr, actNum) {
     let x = curPosition[0];
     let y = curPosition[1];
     worldArrMemory[x][y] = 1;
+
+    // logger.info(actionNameArr[actNum]);
+    // logger.info(worldArrMemory);
+    // logger.info(worldArr);
+    // logger.info(curScore);
+    // logger.info("=============");
 }
 
 /**
