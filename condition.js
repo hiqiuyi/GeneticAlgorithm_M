@@ -12,19 +12,19 @@ const topN = config.topN;
 const actions = config.actions;
 
 /**
- * 生成情形数组，共3*3*3*3*3中情形。因为机器人的东西南北中给有三中情况（墙、空、灌）。
+ * 生成情形数组，共3*3*3*3*3中情形。因为机器人的东西南北中给有5中情况（墙、空且走过、空且未走过、罐且走过、罐且未走过）。
  */
 function genCondition() {
-    // 0=墙，1=空，2=灌
-    let conditionArr = new Array(3 * 3 * 3 * 3 * 3);
+    // 0=墙，1=空且走过，2=空且未走过 3=罐且走过 4=罐且未走过
+    let conditionArr = new Array(5 * 5 * 5 * 5 * 5);
 
     let n = 0;
     // i=北，j=南，k=东，l=西，m=中
-    for (let i = 0; i < 3; i++) {
-        for (let j = 0; j < 3; j++) {
-            for (let k = 0; k < 3; k++) {
-                for (let l = 0; l < 3; l++) {
-                    for (let m = 0; m < 3; m++) {
+    for (let i = 0; i < 5; i++) {
+        for (let j = 0; j < 5; j++) {
+            for (let k = 0; k < 5; k++) {
+                for (let l = 0; l < 5; l++) {
+                    for (let m = 0; m < 5; m++) {
                         conditionArr[n] = ''+i+j+k+l+m;
                         n++;
                     }
