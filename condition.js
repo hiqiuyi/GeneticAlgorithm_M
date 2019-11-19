@@ -102,9 +102,9 @@ function geneMutation(strategy, n) {
  */
 function genNextGeneration(strategyArrAll, scoreMap){
     let nextGenStrategyArr = new Array(startStrategyNum);
-    const topN = getTopNStrategy(scoreMap, 10);
+    const topNArr = getTopNStrategy(scoreMap, topN);
     for(let i=0; i<startStrategyNum/2; i++){
-        let dadAndMomIndex = math.randomSelectTwo(topN);
+        let dadAndMomIndex = math.randomSelectTwo(topNArr);
         let dad = strategyArrAll[dadAndMomIndex[0]];
         let mom = strategyArrAll[dadAndMomIndex[1]];
 
