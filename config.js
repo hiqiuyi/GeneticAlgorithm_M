@@ -16,10 +16,10 @@ module.exports = {
     "# stepNum": "策略每个任务所执行的行动数",
     "stepNum": 200,
     "# genNum": "一共进化多少代",
-    "genNum": 10000,
+    "genNum": 100000,
     "# geneMutationNum": "基因突变数量",
-    "geneMutationNum": 100,
+    "geneMutationNum": 30,
     "# topN": "从得分最高的topN的策略进行组合下一代",
-    "topN": 30,
+    "topN": 8,
     "actionNameArr": ["向北移动", "向南移动", "向东移动", "向西移动", "不动", "捡罐子", "随机移动"]
 };

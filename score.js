@@ -17,13 +17,12 @@ let curPosition = [0, 0];
 let curScore = 0;
 
 // 记录那些地方已经走过
-let worldArrMemory;
+let worldArrMemory = new Array(row);
 
 /**
  * 初始化记忆数组 0=未走过 1=走过
  */
 function initWorldArrMemory() {
-    worldArrMemory = new Array(row);
     for (let i = 0; i < row; i++) {
         worldArrMemory[i] = new Array(column).fill(0);
     }

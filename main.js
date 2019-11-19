@@ -29,6 +29,7 @@ function printGAInfo() {
 function run(strategyArr) {
     let worldArr = world.genEmptyArr(row, column);
     world.initWorld(worldArr);
+    // logger.info(worldArr);
     return score.getScore(worldArr, conditionArr, strategyArr);
 }
 
