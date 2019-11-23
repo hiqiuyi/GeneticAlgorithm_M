@@ -12,11 +12,11 @@ const topN = config.topN;
 const actions = config.actions;
 
 /**
- * 生成情形数组，共3*3*3*3*3中情形。因为机器人的东西南北中给有5中情况（墙、空且走过、空且未走过、罐且走过、罐且未走过）。
+ * 生成情形数组，共5*5*5*5*5中情形,再去掉一些不可能的情形。因为机器人的东西南北中给有5中情况（墙、空且走过、空且未走过、罐且走过、罐且未走过）。
  */
 function genCondition() {
     // 0=墙，1=空且走过，2=空且未走过 3=罐且走过 4=罐且未走过
-    let conditionArr = new Array(5 * 5 * 5 * 5 * 5);
+    let conditionArr = [];
 
     let n = 0;
     // i=北，j=南，k=东，l=西，m=中
@@ -25,8 +25,25 @@ function genCondition() {
             for (let k = 0; k < 5; k++) {
                 for (let l = 0; l < 5; l++) {
                     for (let m = 0; m < 5; m++) {
-                        conditionArr[n] = '' + i + j + k + l + m;
-                        n++;
+                        // 中间不会出现墙
+                        // 不会出现>2的墙数量
+                        // 不会同时出现左右是墙
+                        // 不会同时出现上下是墙
+                        if(m === 0){
+                            continue;
+                        }
+                        if(math.getArrValueCount([i, j, k, l, m], 0) > 2){
+                            continue;
+                        }
+                        if(i === 0 && j === 0){
+                            continue;
+                        }
+
+                        if(k === 0 && l === 0){
+                            continue;
+                        }
+
+                        conditionArr.push('' + i + j + k + l + m);
                     }
                 }
             }

@@ -8,10 +8,10 @@ const math = require('./common/math');
 const row = config.row;
 const column = config.column;
 const startStrategyNum = config.startStrategyNum;
-const conditionNum = config.conditionNum;
 const taskNum = config.taskNum;
 const genNum = config.genNum;
 const conditionArr = condition.genCondition();
+const conditionNum = conditionArr.length;
 
 function printGAInfo() {
     logger.info('世界行数=', row);

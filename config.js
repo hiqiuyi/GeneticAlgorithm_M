@@ -7,8 +7,6 @@ module.exports = {
     "canCount": 50,
     "# startStrategyNum": "第0代的策略数，也就是有多少个体",
     "startStrategyNum": 200,
-    "# conditionNum": "情形数量",
-    "conditionNum": 5 * 5 * 5 * 5 * 5,
     "# actions": "可采取的行为有哪些 0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=捡罐子",
     "actions": [0, 1, 2, 3, 4],
     "# taskNum": "每个策略执行的任务数",

@@ -78,13 +78,32 @@ function getMapValueSum(obj) {
     return Object.values(obj).reduce((a, b) => a + b);
 }
 
+/**
+ * 获取数组指定元素的个数
+ * @param arr
+ * @param num
+ * @returns {number}
+ */
+function getArrValueCount(arr, num){
+    let n = 0;
+    arr.forEach(ele => {
+        if(ele === num){
+            n++;
+        }
+    });
+
+    return n;
+}
+
+
 module.exports = {
     'randomSelect': randomSelect,
     'getKeyOfMaxValue': getKeyOfMaxValue,
     'randomSelectTwo': randomSelectTwo,
     'randomSelectN': randomSelectN,
     'getMapValueSum': getMapValueSum,
-    'getMaxValue': getMaxValue
+    'getMaxValue': getMaxValue,
+    'getArrValueCount': getArrValueCount
 };
 
 
