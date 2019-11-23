@@ -36,9 +36,9 @@ function initWorldArrMemory() {
  * @param worldArr
  */
 function moveToNorth(worldArr) {
-    if(curPosition[0] - 1 < 0){
+    if (curPosition[0] - 1 < 0) {
         curScore -= 5;
-    }else{
+    } else {
         curPosition[0] -= 1;
     }
 }
@@ -48,9 +48,9 @@ function moveToNorth(worldArr) {
  * @param worldArr
  */
 function moveToSouth(worldArr) {
-    if(curPosition[0] + 1 > row - 1){
+    if (curPosition[0] + 1 > row - 1) {
         curScore -= 5;
-    }else{
+    } else {
         curPosition[0] += 1;
     }
 }
@@ -60,9 +60,9 @@ function moveToSouth(worldArr) {
  * @param worldArr
  */
 function moveToEast(worldArr) {
-    if(curPosition[1] + 1 > column - 1){
+    if (curPosition[1] + 1 > column - 1) {
         curScore -= 5;
-    }else{
+    } else {
         curPosition[1] += 1;
     }
 }
@@ -72,9 +72,9 @@ function moveToEast(worldArr) {
  * @param worldArr
  */
 function moveToWest(worldArr) {
-    if(curPosition[1] - 1 < 0){
+    if (curPosition[1] - 1 < 0) {
         curScore -= 5;
-    }else{
+    } else {
         curPosition[1] -= 1;
     }
 }
@@ -87,10 +87,10 @@ function pickCan(worldArr) {
     let x = curPosition[0];
     let y = curPosition[1];
 
-    if(worldArr[x][y] === 1){
+    if (worldArr[x][y] === 1) {
         curScore += 10;
         worldArr[x][y] = 0;
-    }else{
+    } else {
         curScore -= 1;
     }
 }
@@ -98,7 +98,7 @@ function pickCan(worldArr) {
 /**
  *
  * @param worldArr 世界
- * @param actNum  0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
+ * @param actNum  0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=捡罐子
  */
 function doAction(worldArr, actNum) {
     // logger.info("============");
@@ -119,12 +119,7 @@ function doAction(worldArr, actNum) {
             moveToWest(worldArr);
             break;
         case 4:
-            break;
-        case 5:
             pickCan(worldArr);
-            break;
-        case 6:
-            doAction(worldArr, math.randomSelect([0, 1, 2, 3]));
             break;
         default:
             break;
@@ -158,53 +153,53 @@ function getActionValue(worldArr, conditionArr, strategyArr) {
     let west;
     let mid;
 
-    if(x - 1 < 0){
+    if (x - 1 < 0) {
         north = 0;
-    }else{
-        if(worldArr[x-1][y] === 0){
-            north = worldArrMemory[x-1][y] === 1 ? 1 : 2
-        }else{
-            north = worldArrMemory[x-1][y] === 1 ? 3 : 4
+    } else {
+        if (worldArr[x - 1][y] === 0) {
+            north = worldArrMemory[x - 1][y] === 1 ? 1 : 2
+        } else {
+            north = worldArrMemory[x - 1][y] === 1 ? 3 : 4
         }
     }
 
-    if(x + 1 > row - 1){
+    if (x + 1 > row - 1) {
         south = 0;
-    }else{
-        if(worldArr[x+1][y] === 0){
-            south = worldArrMemory[x+1][y] === 1 ? 1 : 2
-        }else{
-            south = worldArrMemory[x+1][y] === 1 ? 3 : 4
+    } else {
+        if (worldArr[x + 1][y] === 0) {
+            south = worldArrMemory[x + 1][y] === 1 ? 1 : 2
+        } else {
+            south = worldArrMemory[x + 1][y] === 1 ? 3 : 4
         }
     }
 
-    if(y + 1 > column - 1){
+    if (y + 1 > column - 1) {
         east = 0;
-    }else{
-        if(worldArr[x][y+1] === 0){
-            east = worldArrMemory[x][y+1] === 1 ? 1 : 2
-        }else{
-            east = worldArrMemory[x][y+1] === 1 ? 3 : 4
+    } else {
+        if (worldArr[x][y + 1] === 0) {
+            east = worldArrMemory[x][y + 1] === 1 ? 1 : 2
+        } else {
+            east = worldArrMemory[x][y + 1] === 1 ? 3 : 4
         }
     }
 
-    if(y - 1 < 0 ){
+    if (y - 1 < 0) {
         west = 0
-    }else{
-        if(worldArr[x][y-1] === 0){
-            west = worldArrMemory[x][y-1] === 1 ? 1 : 2
-        }else{
-            west = worldArrMemory[x][y-1] === 1 ? 3 : 4
+    } else {
+        if (worldArr[x][y - 1] === 0) {
+            west = worldArrMemory[x][y - 1] === 1 ? 1 : 2
+        } else {
+            west = worldArrMemory[x][y - 1] === 1 ? 3 : 4
         }
     }
 
-    if(worldArr[x][y] === 0){
+    if (worldArr[x][y] === 0) {
         mid = worldArrMemory[x][y] === 1 ? 1 : 2
-    }else{
+    } else {
         mid = worldArrMemory[x][y] === 1 ? 3 : 4
     }
 
-    let conditionStr = ''+north+south+east+west+mid;
+    let conditionStr = '' + north + south + east + west + mid;
     let conditionIndex = conditionArr.indexOf(conditionStr);
 
     // printCondition(conditionStr);
@@ -234,12 +229,12 @@ function printCondition(conditionStr) {
  * @param strategyArr 策略数组
  * @returns {number}
  */
-function getScore(worldArr, conditionArr, strategyArr){
+function getScore(worldArr, conditionArr, strategyArr) {
     curPosition = [0, 0];
     curScore = 0;
     initWorldArrMemory();
 
-    for(let i = 0; i< stepNum; i++){
+    for (let i = 0; i < stepNum; i++) {
         let actionValue = getActionValue(worldArr, conditionArr, strategyArr);
         doAction(worldArr, actionValue);
     }
@@ -254,12 +249,12 @@ function getScore(worldArr, conditionArr, strategyArr){
  * @param strategyArr 策略数组
  * @returns {any[]}
  */
-function getActions(worldArr, conditionArr, strategyArr){
+function getActions(worldArr, conditionArr, strategyArr) {
     curPosition = [0, 0];
     curScore = 0;
 
     let actionArr = new Array(stepNum);
-    for(let i = 0; i< stepNum; i++){
+    for (let i = 0; i < stepNum; i++) {
         let actionValue = getActionValue(worldArr, conditionArr, strategyArr);
         doAction(worldArr, actionValue);
         actionArr[i] = actionValue;

@@ -20,7 +20,7 @@ function randomSelectTwo(arr) {
     let index1 = Math.floor((Math.random() * arr.length));
     let index2 = Math.floor((Math.random() * arr.length));
 
-    while(index1 === index2){
+    while (index1 === index2) {
         index1 = Math.floor((Math.random() * arr.length));
         index2 = Math.floor((Math.random() * arr.length));
     }
@@ -35,14 +35,14 @@ function randomSelectTwo(arr) {
  * @returns {any[]|*}
  */
 function randomSelectN(arr, n) {
-    if(arr.length <= n){
+    if (arr.length <= n) {
         return arr;
     }
 
     let selectedArr = new Array(n);
 
-    while(_.uniq(selectedArr).length < selectedArr.length){
-        for(let i=0; i<n; i++){
+    while (_.uniq(selectedArr).length < selectedArr.length) {
+        for (let i = 0; i < n; i++) {
             let index = Math.floor((Math.random() * arr.length));
             selectedArr[i] = arr[index];
         }
@@ -57,7 +57,7 @@ function randomSelectN(arr, n) {
  * @returns {string}
  */
 function getKeyOfMaxValue(obj) {
-    return  Object.keys(obj).reduce((a, b) => obj[a] > obj[b] ? a : b);
+    return Object.keys(obj).reduce((a, b) => obj[a] > obj[b] ? a : b);
 }
 
 /**
@@ -66,7 +66,7 @@ function getKeyOfMaxValue(obj) {
  * @returns {*}
  */
 function getMaxValue(obj) {
-    return  _.max(Object.values(obj))
+    return _.max(Object.values(obj))
 }
 
 /**
@@ -74,8 +74,8 @@ function getMaxValue(obj) {
  * @param obj
  * @returns
  */
-function getMapValueSum(obj){
-    return  Object.values(obj).reduce((a, b) =>a+b);
+function getMapValueSum(obj) {
+    return Object.values(obj).reduce((a, b) => a + b);
 }
 
 module.exports = {

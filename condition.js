@@ -25,7 +25,7 @@ function genCondition() {
             for (let k = 0; k < 5; k++) {
                 for (let l = 0; l < 5; l++) {
                     for (let m = 0; m < 5; m++) {
-                        conditionArr[n] = ''+i+j+k+l+m;
+                        conditionArr[n] = '' + i + j + k + l + m;
                         n++;
                     }
                 }
@@ -42,7 +42,7 @@ function genCondition() {
  */
 function genRandomArr(num) {
     let randomArr = new Array(num);
-    for(let i=0; i<num; i++){
+    for (let i = 0; i < num; i++) {
         randomArr[i] = math.randomSelect(actions)
     }
 
@@ -72,7 +72,7 @@ function getTopNStrategy(scoreMap, n) {
     let topN = new Array(n);
     let scoreMapCopy = _.cloneDeep(scoreMap);
 
-    for(let i=0; i<n; i++){
+    for (let i = 0; i < n; i++) {
         let key = math.getKeyOfMaxValue(scoreMapCopy);
         topN[i] = key;
         delete scoreMapCopy[key]
@@ -87,12 +87,11 @@ function getTopNStrategy(scoreMap, n) {
  * @param n 突变的基因数
  */
 function geneMutation(strategy, n) {
-    for(let i=0; i<n; i++){
+    for (let i = 0; i < n; i++) {
         let index = _.random(0, strategy.length - 1);
         strategy[index] = math.randomSelect(actions)
     }
 }
-
 
 
 /**
@@ -100,10 +99,10 @@ function geneMutation(strategy, n) {
  * @param strategyArrAll 上一代的策略
  * @param scoreMap 上一代每种策略的平均得分
  */
-function genNextGeneration(strategyArrAll, scoreMap){
+function genNextGeneration(strategyArrAll, scoreMap) {
     let nextGenStrategyArr = new Array(startStrategyNum);
     const topNArr = getTopNStrategy(scoreMap, topN);
-    for(let i=0; i<startStrategyNum/2; i++){
+    for (let i = 0; i < startStrategyNum / 2; i++) {
         let dadAndMomIndex = math.randomSelectTwo(topNArr);
         let dad = strategyArrAll[dadAndMomIndex[0]];
         let mom = strategyArrAll[dadAndMomIndex[1]];
