@@ -8,7 +8,7 @@ const geneMutationNum = config.geneMutationNum;
 const topN = config.topN;
 
 
-// 0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=不动，5=捡罐子，6=随机移动
+// 0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=捡罐子
 const actions = config.actions;
 
 /**

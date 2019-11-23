@@ -9,6 +9,8 @@ module.exports = {
     "startStrategyNum": 200,
     "# actions": "可采取的行为有哪些 0=向北移动，1=向南移动，2=向东移动，3=向西移动，4=捡罐子",
     "actions": [0, 1, 2, 3, 4],
+    "# actionNameArr": "行动值对应的名称",
+    "actionNameArr": ["向北移动", "向南移动", "向东移动", "向西移动", "捡罐子"],
     "# taskNum": "每个策略执行的任务数",
     "taskNum": 100,
     "# stepNum": "策略每个任务所执行的行动数",
@@ -18,6 +20,5 @@ module.exports = {
     "# geneMutationNum": "基因突变数量",
     "geneMutationNum": 30,
     "# topN": "从得分最高的topN的策略进行组合下一代",
-    "topN": 8,
-    "actionNameArr": ["向北移动", "向南移动", "向东移动", "向西移动", "不动", "捡罐子", "随机移动"]
+    "topN": 8
 };
